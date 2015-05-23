@@ -1,0 +1,120 @@
+<h2>JobQuest Visualizer</h2>
+
+
+<div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+</div>
+
+
+<div class="row" ng-init="init()">
+    <div class="col-md-4">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+
+                <h3 style="margin-top: 0px;">Candidats</h3>
+                <div class="row" ng-repeat="(key, candidat) in candidats">
+                    <div class="col-md-10">
+                        {{candidat.firstname}} {{candidat.lastname}}
+                    </div>
+                    <div class="col-md-2">
+                        <input type="checkbox" ng-change="draw()" ng-model="candidat.isSelected">
+                    </div>
+                </div>
+
+                <h3>Job</h3>
+                <div class="row" ng-repeat="(key, job) in jobs">
+                    <div class="col-md-10">
+                        {{job.name}}
+                    </div>
+                    <div class="col-md-2">
+                        <input type="checkbox" ng-change="draw()" ng-model="job.isSelected">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div  ng-show="getSelectedCandidats().length==0 || getSelectedJobs().length==0">
+                    Description JobQuest.
+                    <div class="alert alert-success" role="alert">
+                        Veuillez sélectionner un candidat et un job pour commencer à utiliser JobQuest.
+                    </div>
+                </div>
+
+                <div ng-show="getSelectedCandidats().length>0 && getSelectedJobs().length>0">
+
+
+
+                    <div class="panel panel-primary">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">Compétences</h3>
+                          </div>
+                          <div class="panel-body">
+                             <b ng-repeat="(key, candidat) in candidats" ng-if="candidat.isSelected">
+                                <button ng-class="candidat==currentCand ? 'btn btn-sm btn-disabled' : 'btn btn-sm btn-primary'" ng-click="drawMultiCompOneCand(candidat)" style="margin: 5px">{{candidat.firstname}} {{candidat.lastname}}</button>
+                            </b>
+                        <div id="containerMultiCompOneCand" style=" height: 400px; margin: 0 auto"></div>
+                          </div>
+                    </div>
+
+
+                    <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">Panel title</h3>
+                          </div>
+                          <div class="panel-body">
+                            Panel content
+                          </div>
+                    </div>
+
+
+                    <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">Panel title</h3>
+                          </div>
+                          <div class="panel-body">
+                            Panel content
+                          </div>
+                    </div>
+
+
+
+                    <hr>
+                    <h3 style="margin-top: 0px;">Specific competences</h3>
+                    <div align="right">
+                        <div style="width: 200px">
+                            <select ng-change="drawOneCompMultiCand(); drawOneCompMultiCandPieChart()" ng-model="listCompSelected" class="form-control input-md">
+                                <option ng-repeat="i in listComp">{{i}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <div align="center" id="containerOneCompMultiCand" style="height: 400px; margin: 0 auto"></div>
+                    <div id="containerOneCompMultiCandPieChart" style=" height: 400px; margin: 0 auto"></div>
+
+                    <hr>
+                    <h3 style="margin-top: 0px;">Radar Graph</h3>
+
+                    <div id="containerRadar" style=" max-width: 600px; height: 400px; margin: 0 auto"></div>
+                    <div id="containerMultiCompMultiCand" style="height: 400px; margin: 0 auto"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

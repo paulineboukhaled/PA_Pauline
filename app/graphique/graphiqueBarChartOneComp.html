@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+
+<script>
+    // On va charger en json les donnees pour les introduire dans highcharts
+    var data = {
+        chart: {
+            renderTo : 'container'
+        },
+        title: {
+            text: 'Combination chart'
+        },
+
+        xAxis: {
+            categories: ['Java']
+        },
+
+
+        series: [{
+            type: 'column',
+            name: 'Jane',
+            data: [3]
+        }, {
+            type: 'column',
+            name: 'John',
+            data: [2]
+        }, {
+            type: 'column',
+            name: 'Joe',
+            data: [4]
+        }],
+
+
+        yAxis: {
+            plotLines: [{
+                color: 'red', // Color value
+                dashStyle: 'line', // Style of the plot line. Default to solid
+                value: 1, // Value of where the line will appear
+                width: 2,
+                zIndex: 100,
+                // Width of the line  
+                label: {
+                    text: 'I am a label' // Content of the label.
+
+                }
+            }, {
+                color: 'yellow', // Color value
+                dashStyle: 'line', // Style of the plot line. Default to solid
+                value: 3, // Value of where the line will appear
+                width: 2,
+                zIndex: 100,
+                // Width of the line  
+                label: {
+                    text: 'I am a label2' // Content of the label.
+
+                }
+            }]
+
+        }
+    }
+
+    var graph = new Highcharts.Chart(data);
+    console.log(graph);
+
+</script>
+
+
+</body>
+</html>
