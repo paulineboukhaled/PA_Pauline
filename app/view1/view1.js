@@ -11,6 +11,11 @@ angular.module('myApp.view1', ['ngRoute'])
 
     .controller('View1Ctrl', ['$scope', function($scope) {
 
+
+        $scope.keys = function (obj) {
+            return obj ? Object.keys(obj) : []
+        }
+
         $scope.echelle = ["Nombre d'années", "Niveau"];
 
         $scope.echelleValue = {
@@ -25,10 +30,53 @@ angular.module('myApp.view1', ['ngRoute'])
             }
         }
 
+        $scope.removeCandidat = function (key) {
+            delete $scope.candidats[key];
+        }
+
+        $scope.upCandidat = function (key) {
+            var previousId = null;
+            for (var id in $scope.candidats) {
+
+                if (id == key && previousId != null) {
+                    $scope.switchCandidat(key, previousId);
+                    break;
+                } else {
+                    previousId = id;
+                }
+            }
+        }
+        $scope.downCandidat = function (key) {
+            var idFound = false;
+            for (var id in $scope.candidats) {
+
+                if (idFound) {
+                    $scope.switchCandidat(key, id);
+                    break;
+                }
+
+                if (id == key) {
+                    idFound = true;
+                }
+            }
+        }
+
+        $scope.switchCandidat = function (candidat1Id, candidat2Id) {
+            console.log(candidat1Id + " " + candidat2Id);
+
+            var c1 = $scope.candidats[candidat1Id];
+            var c2 = $scope.candidats[candidat2Id];
+
+            $scope.candidats[candidat1Id] = c2;
+            $scope.candidats[candidat2Id] = c1;
+
+        }
+
         $scope.candidats = {
             0:{
                 firstname:"Pauline",
                 lastname:"Bou Khaled",
+                position: 10,
                 skills:{
                     computer:{
                         "java":{
@@ -54,6 +102,7 @@ angular.module('myApp.view1', ['ngRoute'])
             1:{
                 firstname:"Julien",
                 lastname:"Tscherrig",
+                position: 2,
                 skills:{
                     computer:{
                         "cpp":{
@@ -75,6 +124,7 @@ angular.module('myApp.view1', ['ngRoute'])
             2:{
                 firstname:"Omar",
                 lastname:"Abou Khaled",
+                position: 3,
                 skills:{
                     computer:{
                         "java":{
@@ -91,6 +141,7 @@ angular.module('myApp.view1', ['ngRoute'])
             3: {
                 firstname: "Nicolas",
                 lastname: "Schoeter",
+                position: 4,
                 skills: {
                     computer: {
                         "network": {
@@ -125,10 +176,12 @@ angular.module('myApp.view1', ['ngRoute'])
                         }
                     }
                 },
-                isSelected: true
+                isSelected: true,
+                position: 1
             },
             1:{
                 name:"IT Manager",
+                position: 2,
                 skills:{
                     computer:{
                         "cpp":{
@@ -148,6 +201,7 @@ angular.module('myApp.view1', ['ngRoute'])
             },
             2:{
                 name:"Network Administrator",
+                position: 3,
                 skills:{
                     computer:{
                         "network":{
@@ -164,6 +218,7 @@ angular.module('myApp.view1', ['ngRoute'])
             },
             3:{
                 name:"IT Manager 555",
+                position: 4,
                 skills:{
                     computer:{
                         "cpp":{
@@ -218,6 +273,16 @@ angular.module('myApp.view1', ['ngRoute'])
             for(var id in array1) {
                 var elt_ = array1[id];
                 if(elt_==elt)
+                    return true;
+            }
+            return false;
+        }
+
+        // Si array1 contient l'element elt
+        $scope.hashmapContains = function (hasmap1, key1) {
+            for (var key in hasmap1) {
+
+                if (key == key1)
                     return true;
             }
             return false;
@@ -294,7 +359,6 @@ angular.module('myApp.view1', ['ngRoute'])
                 if (id == comp) {
                     return jobOrCandidate.skills.computer[id].level;
                 }
-
             }
             return 0;
         }
@@ -428,24 +492,38 @@ angular.module('myApp.view1', ['ngRoute'])
             var i = 0;
             var selectedJobs = $scope.getSelectedJobs();
 
+            var hash = {};
+
             for (var id in selectedJobs) {
                 var c = selectedJobs[id];
                 var v = $scope.getSkillYear(comp, c);
                 var n = c.name;
+
+                if ($scope.hashmapContains(hash, v)) {
+                    hash[v] = "<b>" + hash[v] + "</b> | <b>" + n + "<b>";
+                } else {
+                    hash[v] = "<b>" + n + "</b>";
+                }
+
+                if (v > max)
+                    max = v;
+
+            }
+
+            for (var id in hash) {
+
                 data.yAxis.plotLines.push({
                     color: color[i++ % color.length],
                     dashStyle: 'line', // Style of the plot line. Default to solid
-                    value: v, // Value of where the line will appear
+                    value: id, // Value of where the line will appear
                     width: 2,
                     zIndex: 100,
                     // Width of the line  
                     label: {
-                        text: n // Content of the label.
+                        text: hash[id] // Content of the label.
 
                     }
                 });
-                if (v > max)
-                    max = v;
             }
 
 
@@ -657,7 +735,7 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.drawOneCompMultiCandLevel = function () {
 
 
-            var comp = "java";
+            var comp = $scope.listCompSelected;
 
             // On va charger en json les donnees pour les introduire dans highcharts
             var data = {
@@ -722,22 +800,42 @@ angular.module('myApp.view1', ['ngRoute'])
             var i = 0;
             var selectedJobs = $scope.getSelectedJobs();
 
+            var hash = {};
+
             for (var id in selectedJobs) {
                 var c = selectedJobs[id];
                 var v = $scope.getSkillLevel(comp, c);
                 var n = c.name;
+
+                if ($scope.hashmapContains(hash, v)) {
+                    hash[v] = "<b>" + hash[v] + "</b> | <b>" + n + "<b>";
+                } else {
+                    hash[v] = "<b>" + n + "</b>";
+                }
+
+                if (v > max)
+                    max = v;
+
+            }
+
+            for (var id in hash) {
+                //var c = selectedJobs[id];
+                var v = $scope.getSkillLevel(comp, c);
+                var n = c.name;
+
                 data.yAxis.plotLines.push({
                     color: color[i++ % color.length],
                     dashStyle: 'line', // Style of the plot line. Default to solid
-                    value: v, // Value of where the line will appear
+                    value: id, // Value of where the line will appear
                     width: 2,
                     zIndex: 100,
                     // Width of the line  
                     label: {
-                        text: n // Content of the label.
+                        text: hash[id]  // Content of the label.
 
                     }
                 });
+
                 if (v > max)
                     max = v;
             }

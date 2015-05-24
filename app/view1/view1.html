@@ -1,6 +1,3 @@
-
-
-
 <div class="row" ng-init="init()">
     <div class="col-md-4">
 
@@ -15,13 +12,23 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Candidats</h3>
                 </div>
-                <div class="row" ng-repeat="(key, candidat) in candidats" style="margin: 3px ">
-                    <div class="col-md-10">
-                        {{candidat.firstname}} {{candidat.lastname}}
-                    </div>
+                <div class="row" ng-repeat="key in keys(candidats) | orderBy: '-position'" style="margin: 3px">
                     <div class="col-md-2">
-                        <input type="checkbox" ng-change="draw()" ng-model="candidat.isSelected">
+                        <input type="checkbox" ng-change="draw()" ng-model="candidats[key].isSelected">
                     </div>
+                    <div class="col-md-7">
+                        {{candidats[key].firstname}} {{candidats[key].lastname}}
+                    </div>
+                    <div class="col-md-3">
+                        <span style="font-size:15px;" class="glyphicon glyphicon-chevron-up" ng-click="upCandidat(key)"
+                              aria-hidden="true"></span>
+                        <span style="font-size:15px;" class="glyphicon glyphicon-chevron-down"
+                              ng-click="downCandidat(key)" aria-hidden="true"></span>
+                        <span style="font-size:15px;" class="glyphicon glyphicon-remove-circle"
+                              ng-click="removeCandidat(key); draw();" aria-hidden="true"></span>
+                    </div>
+
+
                 </div>
             </div>
 
@@ -98,13 +105,14 @@
                                 <div class="col-md-1">
                                 </div>
                                 <div class="col-md-6">
-                                    <select ng-change="drawOneCompMultiCand();" ng-model="listEchelleSelected"
+                                    <select ng-change="drawOneCompMultiCand(); drawOneCompMultiCandLevel();"
+                                            ng-model="listEchelleSelected"
                                             class="form-control input-md">
                                         <option ng-repeat="i in echelle">{{i}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-5">
-                                    <select ng-change="drawOneCompMultiCand(); drawOneCompMultiCandPieChart()"
+                                    <select ng-change="drawOneCompMultiCand(); drawOneCompMultiCandPieChart(); drawOneCompMultiCandLevel();"
                                             ng-model="listCompSelected" class="form-control input-md">
                                         <option ng-repeat="i in listComp">{{i}}</option>
                                     </select>
@@ -112,8 +120,12 @@
                             </div>
                         </div>
                     </div>
-                    <div align="center" id="containerOneCompMultiCand" style="height: 400px; margin: 0 auto"></div>
-                    <div align="center" id="containerOneCompMultiCandLevel" style="height: 400px; margin: 0 auto"></div>
+                    <div ng-show="listEchelleSelected==echelle[0]" align="center" id="containerOneCompMultiCand"
+                         style="height: 400px; margin: 0 auto">>
+                    </div>
+                    <div ng-hide="listEchelleSelected==echelle[0]" align="center" id="containerOneCompMultiCandLevel"
+                         style="height: 400px; margin: 0 auto">>
+                    </div>
                     <div id="containerOneCompMultiCandPieChart" style=" height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
