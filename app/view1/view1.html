@@ -74,6 +74,7 @@
                 <div align="right" style="margin: 6px">
                     <div ng-hide="showItem">
                         <span ng-click="showItem=!showItem; prepareData();" style="font-size:28px; color: #5cb85c"
+                              data-original-title="Tooltip on right"
                               class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                     </div>
                     <div ng-show="showItem">
@@ -94,6 +95,8 @@
                     <div align="right">
                         <div style="width: 400px">
                             <div class="row" style="margin: 3px ">
+                                <div class="col-md-1">
+                                </div>
                                 <div class="col-md-6">
                                     <select ng-change="drawOneCompMultiCand();" ng-model="listEchelleSelected"
                                             class="form-control input-md">
@@ -110,6 +113,7 @@
                         </div>
                     </div>
                     <div align="center" id="containerOneCompMultiCand" style="height: 400px; margin: 0 auto"></div>
+                    <div align="center" id="containerOneCompMultiCandLevel" style="height: 400px; margin: 0 auto"></div>
                     <div id="containerOneCompMultiCandPieChart" style=" height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
