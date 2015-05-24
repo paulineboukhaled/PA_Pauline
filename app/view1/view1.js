@@ -11,6 +11,23 @@ angular.module('myApp.view1', ['ngRoute'])
 
     .controller('View1Ctrl', ['$scope', function($scope) {
 
+        $scope.echelle = ["Nombre d annees", "Niveau"];
+
+        $scope.echelleValue = {
+            0: {
+                level: "low",
+                value: 0
+            },
+            1: {
+                level: "medium",
+                value: 1
+            },
+            2: {
+                level: "high",
+                value: 2
+            }
+        }
+
         $scope.candidats = {
             0:{
                 firstname:"Pauline",
@@ -70,6 +87,26 @@ angular.module('myApp.view1', ['ngRoute'])
                         "cpp":{
                             years:2,
                             level:"hight"
+                        }
+                    }
+                }
+            },
+            3: {
+                firstname: "Nicolas",
+                lastname: "Schoeter",
+                skills: {
+                    computer: {
+                        "network": {
+                            years: 15,
+                            level: "high"
+                        },
+                        "java": {
+                            years: 1,
+                            level: "medium"
+                        },
+                        "cpp": {
+                            years: 5,
+                            level: "hight"
                         }
                     }
                 }
@@ -149,7 +186,7 @@ angular.module('myApp.view1', ['ngRoute'])
             }
         }
 
-
+        $scope.showItem = false;
         $scope.init = function() {
             $scope.draw();
         }
@@ -254,6 +291,33 @@ angular.module('myApp.view1', ['ngRoute'])
             return 0;
         }
 
+
+        // retourne un tableau contenant la correspondance des competences en terme d'annees
+        $scope.getLevelYear = function (comp, jobOrCandidate) {
+            var r = [];
+            var sortedComptences = $scope.getSelectedJobCompetences(); // ordre attentu
+            var cs = $scope.getRequierdCompetences(jobOrCandidate) // a créer
+
+            for (var id in sortedComptences) {
+                if ($scope.arrayContains(cs, sortedComptences[id])) {
+                    var levelCand = jobOrCandidate.skills.computer[sortedComptences[id]].level;
+                    for (var id in $scope.echelleValue) {
+                        if ($scope.arrayContains(levelCand, echelleValue[id])) {
+                            console.log(echelleValue[id].value);
+                            //r.push(jobOrCandidate.skills.computer[sortedComptences[id]].years);
+                        } else {
+                            //r.push(0);
+                        }
+
+                    }
+                    //r.push(jobOrCandidate.skills.computer[sortedComptences[id]].years);
+                } else {
+                    //r.push(0);
+                }
+
+            }
+            return r;
+        }
 
 
         $scope.draw = function() {
@@ -379,27 +443,54 @@ angular.module('myApp.view1', ['ngRoute'])
             }
 
             var color =  ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
-                    '#FF9655', '#FFF263', '#6AF9C4'];
+                '#FF9655', '#FFF263', '#6AF9C4'];
             var i = 0;
             var selectedJobs = $scope.getSelectedJobs();
-            for(var id in selectedJobs) {
-                var c = selectedJobs[id];
-                var v = $scope.getSkillYear(comp, c);
-                var n = c.name;
-                data.yAxis.plotLines.push({
-                    color: color[i++%color.length],
-                    dashStyle: 'line', // Style of the plot line. Default to solid
-                    value: v, // Value of where the line will appear
-                    width: 2,
-                    zIndex: 100,
-                    // Width of the line  
-                    label: {
-                        text: n // Content of the label.
+            if ($scope.listEchelleSelected == "Nombre d annees") {
+                for (var id in selectedJobs) {
+                    var c = selectedJobs[id];
+                    var v = $scope.getSkillYear(comp, c);
+                    var n = c.name;
+                    data.yAxis.plotLines.push({
+                        color: color[i++ % color.length],
+                        dashStyle: 'line', // Style of the plot line. Default to solid
+                        value: v, // Value of where the line will appear
+                        width: 2,
+                        zIndex: 100,
+                        // Width of the line  
+                        label: {
+                            text: n // Content of the label.
 
-                    }
-                });
-                if(v>max)
-                    max = v;
+                        }
+                    });
+                    if (v > max)
+                        max = v;
+                }
+                console.log($scope.listEchelleSelected);
+
+            } else if ($scope.listEchelleSelected == "Niveau") {
+                for (var id in selectedJobs) {
+                    var c = selectedJobs[id];
+                    var v = $scope.getSkillYear(comp, c);
+                    $scope.getLevelYear(comp, c);
+                    var n = c.name;
+                    data.yAxis.plotLines.push({
+                        color: color[i++ % color.length],
+                        dashStyle: 'line', // Style of the plot line. Default to solid
+                        value: v, // Value of where the line will appear
+                        width: 2,
+                        zIndex: 100,
+                        // Width of the line  
+                        label: {
+                            text: n // Content of the label.
+
+                        }
+                    });
+                    if (v > max)
+                        max = v;
+                }
+                console.log($scope.listEchelleSelected);
+
             }
 
             data.yAxis.max = max;
@@ -607,10 +698,29 @@ angular.module('myApp.view1', ['ngRoute'])
 
         }
 
+        $scope.prepareData = function () {
+            $scope.listCompSelected = $scope.getSelectedJobCompetences()[0];
+            $scope.listEchelleSelected = $scope.echelle[0];
 
+            $scope.drawOneCompMultiCand();
+            $scope.drawOneCompMultiCandPieChart();
+        }
     }]);
 
 
+$('#sidebar').affix({
+    offset: {
+        top: 245
+    }
+});
+
+var $body = $(document.body);
+var navHeight = $('.navbar').outerHeight(true) + 10;
+
+$body.scrollspy({
+    target: '#leftCol',
+    offset: navHeight
+});
 
 
 
