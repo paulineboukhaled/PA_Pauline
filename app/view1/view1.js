@@ -9,6 +9,7 @@ angular.module('myApp.view1', ['ngRoute'])
         });
     }])
 
+    //.controller('View1Ctrl', ['$scope','webService', function($scope, webService) {
     .controller('View1Ctrl', ['$scope', function($scope) {
 
 
@@ -72,6 +73,11 @@ angular.module('myApp.view1', ['ngRoute'])
 
         }
 
+        /*
+         webService.getCandidats ().then (function (response) {
+         $scope.candidats = response.data;
+         });
+         */
         $scope.candidats = {
             0:{
                 firstname:"Pauline",
@@ -233,6 +239,47 @@ angular.module('myApp.view1', ['ngRoute'])
                             years:8,
                             level: 1
                         }
+                    }
+                }
+            },
+            4: {
+                name: "Job Omar",
+                position: 5,
+                skills: {
+                    computer: {
+                        "cpp": {
+                            years: 10,
+                            level: 0
+                        },
+                        "html": {
+                            years: 3,
+                            level: 2
+                        },
+                        "c": {
+                            years: 14,
+                            level: 1
+                        },
+                        ".net": {
+                            years: 2,
+                            level: 1
+                        },
+                        "xml": {
+                            years: 6,
+                            level: 1
+                        },
+                        "c#": {
+                            years: 2,
+                            level: 1
+                        },
+                        "highcharts": {
+                            years: 5,
+                            level: 1
+                        },
+                        "java": {
+                            years: 3,
+                            level: 1
+                        }
+
                     }
                 }
             }

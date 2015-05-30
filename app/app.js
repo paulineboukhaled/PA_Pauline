@@ -22,3 +22,11 @@ myApp.controller('MenuController', ['$scope', '$location', function ($scope, $lo
     }
   }
 }]);
+
+/*
+ myApp.service ('webService', function ($http) {
+ this.getCandidats = function () {
+ return $http.get("myJavaWebService/GetCandidats");
+ }
+ });
+ */
