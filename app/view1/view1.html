@@ -10,7 +10,7 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Candidats</h3>
+                    <h3 class="panel-title">Applicants</h3>
                 </div>
                 <div class="row" ng-repeat="key in keys(candidats) | orderBy: '-position'" style="margin: 3px">
                     <div class="col-md-2">
@@ -56,9 +56,8 @@
 
 
         <div  ng-show="getSelectedCandidats().length==0 || getSelectedJobs().length==0">
-            Description JobQuest.
             <div class="alert alert-success" role="alert">
-                Veuillez sélectionner un candidat et un job pour commencer à utiliser JobQuest.
+                Please select at least one applicant and one job to start using JobQuest.
             </div>
         </div>
 
@@ -70,7 +69,7 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Compétences</h3>
+                    <h3 class="panel-title">Skills</h3>
                 </div>
                 <div class="panel-body">
                     <b ng-repeat="(key, candidat) in candidats" ng-if="candidat.isSelected">
@@ -95,7 +94,7 @@
             <div ng-show="showItem==true">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Specific competences</h3>
+                    <h3 class="panel-title">Specific Skill</h3>
                 </div>
                 <div class="panel-body">
                     {{echelle.level}}
@@ -132,7 +131,7 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Toutes les compétences</h3>
+                    <h3 class="panel-title">All Skills</h3>
                 </div>
                 <div class="panel-body">
                     <div id="containerRadar" style=" max-width: 600px; height: 400px; margin: 0 auto"></div>

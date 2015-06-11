@@ -9,15 +9,14 @@ angular.module('myApp.view1', ['ngRoute'])
         });
     }])
 
-    //.controller('View1Ctrl', ['$scope','webService', function($scope, webService) {
-    .controller('View1Ctrl', ['$scope', function($scope) {
+    .controller('View1Ctrl', ['$scope', '$http', function ($scope, $http) {
 
 
         $scope.keys = function (obj) {
             return obj ? Object.keys(obj) : []
         }
 
-        $scope.echelle = ["Nombre d'années", "Niveau"];
+        $scope.echelle = ["Year of experience", "Level"];
 
         $scope.echelleValue = {
             0: {
@@ -73,11 +72,17 @@ angular.module('myApp.view1', ['ngRoute'])
 
         }
 
+        $http.get('http://localhost:8080/jobquest/rest/candidats/all').
+            success(function (data) {
+                $scope.candidats = data;
+            });
+
+
+        $http.get('http://localhost:8080/jobquest/rest/jobs/all').
+            success(function (data) {
+                $scope.jobs = data;
+            });
         /*
-         webService.getCandidats ().then (function (response) {
-         $scope.candidats = response.data;
-         });
-         */
         $scope.candidats = {
             0:{
                 firstname:"Pauline",
@@ -165,9 +170,9 @@ angular.module('myApp.view1', ['ngRoute'])
                     }
                 }
             }
-        }
+         }*/
 
-        $scope.jobs = {
+        /* $scope.jobs = {
             0:{
                 name:"Dev CPP",
                 skills:{
@@ -283,7 +288,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     }
                 }
             }
-        }
+         }*/
 
         $scope.showItem = false;
         $scope.init = function() {
@@ -440,12 +445,12 @@ angular.module('myApp.view1', ['ngRoute'])
                     renderTo : 'containerMultiCompOneCand'
                 },
                 title: {
-                    text: 'Compétences de '+candidat.firstname+" "+candidat.lastname
+                    text: 'Skills of ' + candidat.firstname + " " + candidat.lastname
                 },
                 yAxis: {
                     allowDecimals: false,
                     title: {
-                        text: "Années d'expérience"
+                        text: "Year of experience"
                     },
                     min: 0
                 },
@@ -486,7 +491,6 @@ angular.module('myApp.view1', ['ngRoute'])
 
         }
 
-
         $scope.drawOneCompMultiCand = function() {
 
             var comp=$scope.listCompSelected;
@@ -497,7 +501,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     renderTo : 'containerOneCompMultiCand'
                 },
                 title: {
-                    text: 'Compétence '+comp
+                    text: 'Selected Skill: ' + comp
                 },
 
                 xAxis: {
@@ -513,7 +517,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     allowDecimals: false,
                     max:10,
                     title: {
-                        text: "Années d'expérience"
+                        text: "Year of experience"
                     }
                 }
             }
@@ -593,7 +597,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     plotShadow: false
                 },
                 title: {
-                    text: 'Compétence '+comp
+                    text: 'Selected Skill: ' + comp
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -618,7 +622,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
             var sub = {
                 type: 'pie',
-                name: 'Compétence ' + comp,
+                name: 'Skill ' + comp,
                 data: []
             };
 
@@ -728,14 +732,14 @@ angular.module('myApp.view1', ['ngRoute'])
                     renderTo : 'containerMultiCompMultiCand'
                 },
                 title: {
-                    text: 'Toutes les compétences'
+                    text: 'All SKills'
                 },
                 xAxis: {
                     categories: listComp
                 },
                 yAxis:{
                     title:{
-                        text: "Années d'expérience"
+                        text: "Year of experience"
                     },
                     allowDecimals: false,
 
@@ -790,7 +794,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     renderTo: 'containerOneCompMultiCandLevel'
                 },
                 title: {
-                    text: 'Compétence ' + comp
+                    text: 'Skills ' + comp
                 },
 
                 xAxis: {
@@ -803,7 +807,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
                 yAxis: {
                     title: {
-                        text: 'Niveau'
+                        text: 'Level'
                     },
                     min: 0,
                     max: 2,
